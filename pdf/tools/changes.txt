@@ -5,4 +5,4 @@
 #page_outline 30-31.satır A harfi
 
 
-views.py 102. satırdaki qr_code generator page_outline'a alınacak.
+views.py 102. satırdaki qr_code generator page_outline'a alındı.

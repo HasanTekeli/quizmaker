@@ -95,12 +95,7 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year,exam_semester,exam_ydl[0:3],e_type_upper)
 	pdfName = '{0} {1} TERM YDL{2} {3} EXAM {4} {5}.pdf'.format(exam_year,exam_semester,exam_ydl,e_type_upper,exam_session,booklet_type)
 
-	pageWidth = 210*mm
 	header_font_size = 12
-
-
-
-
 
 	page = PageOutline(exam_info, exam_session, booklet_type)
 	
@@ -116,9 +111,6 @@ def exportPDF(request,exam_id): #A Kitapçığı
 		canvas.saveState()
 		#Burada class based olarak A kitapçığı 1.sayfaya özgü bölümler oluşturuluyor.
 		page.bookletA1(canvas)
-		
-		#Başlık kısmı qrcode:
-		#qr_generator(exam_info, exam_session, booklet_type)
 		
 		#Başlık yazısı (Sınav İsmi)
 		canvas.drawCentredString(290, 755, title4)
@@ -144,7 +136,6 @@ def exportPDF(request,exam_id): #A Kitapçığı
 		canvas.restoreState()
 
 	def myLaterPages(canvas, doc):
-		pageWidth = 210*mm
 		#Burada class based olarak sayfa tablosu oluşturuluyor.
 		page.outline2(canvas)
 		canvas.saveState()
@@ -358,7 +349,6 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 		canvas.restoreState()
 
 	def myLaterPages(canvas, doc):
-		pageWidth = 210*mm
 		#Burada class based olarak sayfa tablosu oluşturuluyor.
 		page.outline2(canvas)
 		canvas.saveState()

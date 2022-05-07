@@ -86,10 +86,10 @@ class PageOutline():
         canvas.drawInlineImage(str(static_folder)+ '/img/logo.png', 20, 755, 60, 60)
 
         #####QR code generator
-        qr_generator(canvas, self.exam_info, self.exam_session, self.booklet_type)
+        #qr_generator(canvas, self.exam_info, self.exam_session, self.booklet_type)
 
         #30. yıl logosu
-        #canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
+        canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
 
         #Kitapçık türü çerçeveleri
         canvas.setFont(font_bold, 16)
