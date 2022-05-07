@@ -38,6 +38,7 @@ from pdf import table_style
 from pdf.tools.qr_generator import qr_generator
 from pdf.tools.conditional_spacer import ConditionalSpacer
 from pdf.tools import options_on_key
+from pdf.tools.options_columns import set_option_column
 #Dosya ayrıştırma bitiş
 
 
@@ -146,8 +147,7 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	# Style kısmı class-based oldu.
 	page.pageStyle(pdfName)
 	response, styles = page.pageStyle(pdfName)
-	q_font_size = 10 #Soruların font büyüklüğü
-	o_font_size = 10 #Cevapların font büyüklüğü
+
 	##############################################
 	#Buraya adaptive spacer gibi birşey eklenecek
 	if exam_ydl == "183" or exam_ydl == "184":
@@ -172,72 +172,12 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	elements.append(NextPageTemplate('Page2'))
 	#Soru atamaları	
 	
-	q_table_style = table_style.q_table_style
-	o_table_style = table_style.o_table_style
+
 
 	options_on_key.set_options_on_a(get_questions, a_answer)
 
+	set_option_column(get_questions, styles, elements, opt_2_que_spacer)
 
-	for idx,value in enumerate(get_questions):
-		qnum = idx+1
-		wid_qnum = 0.9*cm
-		wid_q = 8.6*cm
-		if int(get_questions[idx].columns) == 2:
-			datao = [
-				(Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option']),Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option'])),
-				(Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option']),Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option']))
-			]
-			o=Table(datao,colWidths=[(4.2*cm),(4.2*cm)])
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			q=Table(dataq,colWidths=[(wid_qnum),(wid_q)])
-			
-			q.setStyle(q_table_style)
-		elif int(get_questions[idx].columns) == 4:
-			datao = [
-				(Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option']),
-				Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option']),
-				Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option']),
-				Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option']))
-			]
-			o=Table(datao,colWidths=[(2*cm),(2*cm),(2*cm),(2*cm)])
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			q=Table(dataq,colWidths=[(wid_qnum),(wid_q)])
-			q.setStyle(q_table_style)
-			
-		else:
-			datao = [
-				('',Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option'])),
-			]
-			o=Table(datao,colWidths=[(0*cm),(8.5*cm)],rowHeights=22)
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			data = [
-				(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),
-				Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-				('',o),
-			]
-			q=Table(data,colWidths=[(wid_qnum),(wid_q)])
-			q.setStyle(q_table_style)
-		
-		elements.append(KeepTogether(q))
-		elements.append(opt_2_que_spacer)
-
-	
-	
 	doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 	
 	return response
@@ -358,72 +298,10 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 	doc.addPageTemplates([PageTemplate(id='Page2',frames=[frame3,frame4],onPage=myLaterPages),])
 	elements.append(NextPageTemplate('Page2'))
 
-	#Soru atamaları
-	q_table_style = table_style.q_table_style
-	o_table_style = table_style.o_table_style
-
 	#Cevapları cevap anahtarına göre düzenleme
 	options_on_key.set_options_on_b(get_questions, b_answer)
-	
-	for idx,value in enumerate(get_questions):
-		qnum = idx+1
-		wid_qnum = 0.9*cm
-		wid_q = 8.6*cm
-		if int(get_questions[idx].columns) == 2:
-			datao = [
-				(Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option']),Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option'])),
-				(Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option']),Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option']))
-			]
-			o=Table(datao,colWidths=[(4.2*cm),(4.2*cm)])
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			q=Table(dataq,colWidths=[(wid_qnum),(wid_q)])
-			
-			q.setStyle(q_table_style)
-		elif int(get_questions[idx].columns) == 4:
-			datao = [
-				(Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option']),
-				Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option']),
-				Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option']),
-				Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option']))
-			]
-			o=Table(datao,colWidths=[(2*cm),(2*cm),(2*cm),(2*cm)])
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			q=Table(dataq,colWidths=[(wid_qnum),(wid_q)])
-			q.setStyle(q_table_style)
-			
-		else:
-			datao = [
-				('',Paragraph('<para fontSize={0}>a. {1}</para>'.format(o_font_size, str(value.option1)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>b. {1}</para>'.format(o_font_size, str(value.option2)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>c. {1}</para>'.format(o_font_size, str(value.option3)), styles['Option'])),
-				('',Paragraph('<para fontSize={0}>d. {1}</para>'.format(o_font_size, str(value.option4)), styles['Option'])),
-			]
-			o=Table(datao,colWidths=[(0*cm),(8.5*cm)],rowHeights=22) #colWidths=[(0*cm),(8.5*cm)]
-			o.setStyle(o_table_style)
-			dataq = [
-			(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-			("",o)
-			]
-			data = [
-				(Paragraph('<para fontSize={0}>{1}.</para>'.format(q_font_size,str(qnum)),styles['Question']),
-				Paragraph('<para fontSize={0}> {1}</para>'.format(q_font_size, str(value).replace('\n','<br />\n')), styles['Question'])),
-				('',o),
-			]
-			q=Table(data,colWidths=[(wid_qnum),(wid_q)])
-			q.setStyle(q_table_style)
-		
-		elements.append(KeepTogether(q))
-		elements.append(opt_2_que_spacer)
+	set_option_column(get_questions, styles, elements, opt_2_que_spacer)
 
-	
 	
 	doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 	
