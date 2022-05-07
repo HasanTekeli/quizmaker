@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block style %}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+  
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+{% endblock %}
+
+{% block title %}Quiz List{% endblock %}
+
+{% block content %}
+
+    
+    <div align="center">
+    <table style="width:80%">
+        <tr>
+            <th>Sınav Adı</th>
+            <th>İncele</th>
+            <th>Düzenle</th>
+            <th>A Kitapçığı</th>
+            <th>B Kitapçığı</th>
+            <th>Arşivle</th>
+        </tr>
+        {% for exam in exams %}
+        <tr>
+            {% if exam.ydl == "185L" or exam.ydl == "186L" %}
+                <td>{{exam.semester}} YDL{{exam.ydl}}isans {{exam.exam}} {{exam.session}}.Oturum</td>
+            {% elif exam.ydl == "185" or exam.ydl == "186" %}
+                <td>{{exam.semester}} YDL{{exam.ydl}} Önlisans {{exam.exam}} {{exam.session}}.Oturum</td>
+            {% else %}
+                <td>{{exam.semester}} YDL{{exam.ydl}} {{exam.exam}} {{exam.session}}.Oturum</td>
+            {% endif %}
+            <td><a class="btn btn-primary" href="{% url 'quiz:exam_detail' exam.pk %}">İncele</a></td> 
+            <td><a class="btn btn-primary" href="{% url 'quiz:exam_detail_update' exam.pk %}">Düzenle</a></td> 
+            <td><a class="btn btn-success" href="{% url 'pdf:exam_export' exam.pk %}">A Kitapçığı</a></td> 
+            <td><a class="btn btn-success" href="{% url 'pdf:exam_export_b' exam.pk %}">B Kitapçığı</a></td> 
+            <td><a class="btn btn-success" id="archive_button" href="{% url 'quiz:archive_exam' exam.pk %}">Arşivle</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

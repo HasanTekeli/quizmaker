@@ -1,0 +1,141 @@
+#examinfo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#examinfo.h5 {
+    line-height: 1;
+    padding: 0.5em;
+}
+
+#header {
+    border: 1px solid;
+}
+
+#beulogo, #qrcode {
+    margin: 10px;
+}
+
+#bookletleft {
+    margin-left: 30px;
+    margin-top: 30px;
+    border: 2px solid;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+#bookletright {
+    margin-right: 30px;
+    margin-top: 30px;
+    border: 2px solid;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+#subheader {
+    height: 200px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#studentinfo {
+    border: 2px solid;
+    line-height: normal;
+
+}
+
+.container {
+    display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.column-one {
+    order: 1;
+    width: 60%;
+} 
+
+.column-two {
+    order: 2;
+    width: 60%;
+} 
+
+.column-three {
+    order: 3;
+    width: 20%;
+} 
+
+.alignedtext {
+    text-align: justify;
+}
+
+.noindent {
+    padding-left: 0px;
+}
+
+#qcontainer {
+    display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#qcolumn-one {
+    order: 1;
+    width: 49%;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    height: 1150px;
+} 
+
+#qcolumn-two {
+    order: 3;
+    width: 49%;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    height: 1150px;
+} 
+
+#yanmetin {
+    order: 2;
+    width: 2%;
+    writing-mode: vertical-rl;
+}
+
+.orta {
+    border-bottom: none;
+    /* border-top: 1px solid black; */
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    border-color: black;
+}
+
+.orta legend {
+    -webkit-padding-start: 8px;
+    -webkit-padding-end: 8px;
+    background: transparent;
+    /** It's cool because you don't need to fill your bg-color as you would need to in some of the other examples that you can find (: */
+    font-weight: normal;
+    /* I preffer the text to be regular instead of bold  */
+    color: black;
+}
+
+.featured-header {
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    border-color: black;
+}
+
+.featured-header legend {
+    -webkit-padding-start: 8px;
+    -webkit-padding-end: 8px;
+    background: transparent;
+    font-weight: normal;
+    color: black;
+}

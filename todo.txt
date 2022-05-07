@@ -1,0 +1,13 @@
+* Login/Logout ayarla - OK
+* soruların girileceği alan yap. OK
+* PDF taslağını tamamla. OK
+* PDF'te flowables ile soruların girileceği alanı ayarla OK
+* rep5 dosyasındaki uygulamayı pdfgenerator uygulamasının view kısmına entegre et. OK
+* View'dan PDF'e verileri çek. OK
+* django-qr-code uygulamasını entegre et. OK
+* PDF detay sayfasına pdf'e dönüştür butonu ayarla. OK
+
+weasyprint uyarlaması - eklenen değiştirilen dosyalar
+1. questions.views'a _wp function eklendi.
+2. questions/urls.py'a pdf url'si eklendi.
+3. templates/mc/pdfdeneme.html eklendi.

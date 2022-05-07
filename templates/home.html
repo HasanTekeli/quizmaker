@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">
+    <div class="card-header text-center"><p>Merhaba {{ user.username }}!</p></div>
+    <div class="card-body text-center">
+      <p><a href="{% url 'quiz:exam_list' %}">Tüm Etkin Sınavları Göster</a></p>
+      <p><a href="{% url 'logout' %}">Çıkış Yap</a></p>
+    </div>
+  </div>
+{% else %}
+    <div class="card bg-light mb-3 mx-auto" style="max-width: 18rem;">
+      <div class="card-header text-center">Giriş Yap</div>
+      <div class="card-body text-center">
+        <p><a href="{% url 'login' %}">Giriş yapmak için tıklayın</a></p>
+      </div>
+    </div>
+  
+
+{% endif %} 
+
+{% endblock %}

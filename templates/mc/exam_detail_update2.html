@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block style %}
+.sidenav {
+    width: 110px;
+    position: fixed;
+    z-index: 1;
+    top: 55px;
+    left: 10px;
+    background: white;
+    overflow-x: hidden;
+    padding: 8px 0;
+  }
+  
+.sidenav li {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    /*color: #2196F3;
+    display: block;*/
+  }
+  
+.sidenav a:hover {
+    color: #064579;
+  }
+.main {
+    margin-left: 160px; /* Same width as the sidebar + left position in px */
+    padding: 0px 10px;
+}
+.card {
+    width: 800px;
+}
+{% endblock %}
+{% block content %}
+ 
+<div class="main">
+    <form method="POST" class="form-horizontal" role="form">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <div class="sidenav bg-light">
+            <ul class="list-group">
+                <span class="no-button-class">
+                    <span>
+                        <li class="list-group-item"><input type="submit" class="btn btn-primary" value="Kaydet"></input></li>
+                    </span>
+                </span>
+            </ul>
+          </div>
+        
+        {% for f in formset %}
+        {% for field in f %}
+            <div class="form-group">
+                
+                <div class="col-sm-10">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <h5>{{forloop.counter}}{{field.question}}</h5>
+                            </div>
+                            <div class="col">
+
+                                <p>a. {{field.option1}}</p>
+                                <p>b. {{field.option2}}</p>
+                                <p>c. {{field.option3}}</p>
+                                <p>d. {{field.option4}}</p>
+                                <p>{{field.columns}}</p>
+                                
+                            </div>
+                            <div>
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% endfor %}
+        <input type="submit">
+        <br/>
+    </form>
+</div>
+{% endblock %}

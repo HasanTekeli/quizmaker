@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block style %}
+.sidenav {
+    width: 110px;
+    position: fixed;
+    z-index: 1;
+    top: 55px;
+    left: 10px;
+    background: white;
+    overflow-x: hidden;
+    padding: 8px 0;
+  }
+  
+.sidenav li {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    /*color: #2196F3;
+    display: block;*/
+  }
+  
+.sidenav a:hover {
+    color: #064579;
+  }
+.main {
+    margin-left: 160px; /* Same width as the sidebar + left position in px */
+    padding: 0px 10px;
+}
+.cardish {
+    width: 800px;
+}
+{% endblock %}
+{% block content %}
+
+<div class="main">
+    <form method="POST" class="bootstrap4">
+        {% csrf_token %}
+        <div class="sidenav bg-light">
+            <ul class="list-group">
+                <span class="no-button-class">
+                    <span>
+                        <li class="list-group-item"><button type="submit" class="btn btn-primary">Kaydet</button></li>
+                    </span>
+                </span>
+            </ul>
+          </div>
+        <div class="cardish">
+        <h3>{{ exam }}</h3>
+        {{ formset|crispy }}
+        {% if exam.ydl == '183' %}
+        <textarea placeholder="Paragrafı buraya ekleyin." rows="4" cols="50"></textarea>
+        {% endif %}
+        {% if exam.ydl == '184' %}
+        <textarea placeholder="Paragrafı buraya ekleyin." rows="4" cols="50"></textarea>
+        {% endif %}
+        </div>
+        
+        <br/>
+    </form>
+</div>
+{% endblock %}

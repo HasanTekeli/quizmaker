@@ -1,0 +1,46 @@
+<html>
+ <head>
+   <title>Test</title>
+   <style>
+     h1 {
+       text-align: center;
+     }
+
+     table {
+       border: 1px solid;
+       margin: 0 auto;
+       width: 70%;
+     }
+
+     td, th {
+       text-align: center;
+       border: 1px solid;
+     }
+   </style>
+ </head>
+ <body>
+   <h1>{{exam}}</h1>
+   <table>
+     <thead>
+       <tr>
+         <th>Question</th>
+         <th>A.</th>
+         <th>B.</th>
+         <th>C.</th>
+         <th>D.</th>
+       </tr>
+     </thead>
+     <tbody>
+       {% for i in question %}
+         <tr>
+           <td>{{ i.question }}</td>
+           <td>{{ i.option1 }}</td>
+           <td>{{ i.option2 }}</td>
+           <td>{{ i.option3 }}</td>
+           <td>{{ i.option4 }}</td>
+         </tr>
+       {% endfor %}    
+     </tbody>
+   </table>
+ </body>
+</html>

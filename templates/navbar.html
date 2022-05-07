@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">Quiz Maker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      {% url 'quiz:exam_detail' id=exam_id as exam_detail %}
+      {% url 'quiz:exam_detail_update' as exam_detail_update %}
+      {% url request.path as path %}
+      {% url 'quiz:exam_list' as exam_list %}
+      <ul class="navbar-nav mr-auto">
+        {% if user.is_authenticated %}
+        
+          {% if request.path == exam_list %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'quiz:archived_exam_list' %}">Arşivlenen Sınavlar</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'quiz:exam_list' %}">Sınav Listesi</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Çıkış yap</a>
+            </li>
+          </ul>
+      </div>
+            
+        {% else %}
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link float-right" href="{% url 'login' %}">Giriş yap</a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      
+    </div>
+  </nav>

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block style %}
+
+ul { list-style-type: none; }
+ul:nth-child(even) {background-color:#dddddd;}
+.sidenav {
+  width: 140px;
+  position: fixed;
+  z-index: 1;
+  top: 200px;
+  left: 10px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+.sidenav li {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 16px;
+  /*color: #2196F3;*/
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.embedded {
+    width: 100%;
+    position: fixed;
+    float: right;
+}
+
+.main {
+  margin-left: 160px; /* Same width as the sidebar + left position in px */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+{% endblock %}
+
+{% block title %}Exam Detail{% endblock %}
+
+{% block content %}
+<div class="sidenav bg-light">
+  <ul class="list-group">
+    <li class="list-group-item"><a href="{% url 'quiz:exam_detail_update' exam.pk %}">Düzenle</a></li>
+    <li class="list-group-item"><a href="{% url 'pdf:exam_export' exam.pk %}">PDF A Kitapçığı</a></li>
+    <li class="list-group-item"><a href="{% url 'pdf:exam_export_b' exam.pk %}">PDF B Kitapçığı</a></li>
+    <li class="list-group-item"><button onclick="var ifr=document.getElementById('pdfembed');ifr.src=ifr.src;">PDF'i yenile</button></li>
+  </ul>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg">
+            <div class="main">
+                <h4>{{ exam.semester }} - YDL{{ exam.ydl }} - {{ exam.exam }} - Raw Hali</h4>
+                <p>Cevapları karıştırmak için soldan A Kitapçığı ve B kitapçığı linklerine tıklayabilirsiniz.</p>
+                {% for q in question %}
+              <div class="card">
+                <div class="card-header">
+                <p style="display:inline">{{forloop.counter}}.{{ q.question|linebreaks }}</p>
+                </div>
+                <div class="card-body">
+                  <ol type="a">
+                    <li>{{q.option1}}</li>
+                    <li>{{q.option2}}</li>
+                    <li>{{q.option3}}</li>
+                    <li>{{q.option4}}</li>
+                  </ol>
+                </div>
+                
+              </div>
+              {% endfor %} 
+              
+            </div>
+        </div>
+        <div class="col-lg">
+            <iframe id="pdfembed" src="{% url 'pdf:exam_export' exam_id=exam.id %}" width="500px" height="500px"></iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
