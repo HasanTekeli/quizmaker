@@ -34,11 +34,17 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	if exam_ydl == "183" or exam_ydl == "184":
 		list_of_ques = list(get_ques_in_order)
 		ques_except_last = [x for i,x in enumerate(list_of_ques) if i!=24]
-		last_que = list_of_ques.pop()
+		try: # Hiç soru eklenmemişse hata vermemesi için try except blokunda
+			last_que = list_of_ques.pop()
+		except IndexError:
+			pass
 		list_of_ques_except_last = list(ques_except_last)
 		random.seed(2)
 		random.shuffle(list_of_ques_except_last)
-		list_of_ques_except_last.append(last_que)
+		try: # Hiç soru eklenmemişse hata vermemesi için try except blokunda
+			list_of_ques_except_last.append(last_que)
+		except UnboundLocalError:
+			pass
 		get_questions = list(list_of_ques_except_last)
 	else:
 		get_questions = list(get_ques_in_order)
@@ -55,8 +61,13 @@ def exportPDF(request,exam_id): #A Kitapçığı
 		a_answer = answers
 	
 	booklet_type = "A"
-	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year,exam_semester,exam_ydl[0:3],e_type_upper)
-	pdfName = '{0} {1} TERM YDL{2} {3} EXAM {4} {5}.pdf'.format(exam_year,exam_semester,exam_ydl,e_type_upper,exam_session,booklet_type)
+	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year, exam_semester, exam_ydl[0:3], e_type_upper)
+	pdfName = '{0} {1} TERM YDL{2} {3} EXAM {4} {5}.pdf'.format(exam_year,
+																exam_semester,
+																exam_ydl,
+																e_type_upper,
+																exam_session,
+																booklet_type)
 
 	header_font_size = 12
 
@@ -156,11 +167,17 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 	if exam_ydl == "183" or exam_ydl == "184":
 		list_of_ques = list(get_ques_in_order)
 		ques_except_last = [x for i,x in enumerate(list_of_ques) if i!=24]
-		last_que = list_of_ques.pop()
+		try:
+			last_que = list_of_ques.pop()
+		except IndexError:
+			pass
 		list_of_ques_except_last = list(ques_except_last)
 		random.seed(4)
 		random.shuffle(list_of_ques_except_last)
-		list_of_ques_except_last.append(last_que)
+		try:
+			list_of_ques_except_last.append(last_que)
+		except UnboundLocalError:
+			pass
 		get_questions = list(list_of_ques_except_last)
 	else:
 		get_questions = list(get_ques_in_order)

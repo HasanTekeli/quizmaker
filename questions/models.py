@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django_extensions.db.fields import AutoSlugField
+
 
 class Year(models.Model):
     year = models.CharField(max_length=9, blank=True,
@@ -13,6 +13,7 @@ class Year(models.Model):
 
     def __str__(self):
         return self.year
+
 
 class Semester(models.Model):
     SEM_CHOICES = (
@@ -29,20 +30,21 @@ class Semester(models.Model):
     def __str__(self):
         return "{0} ({1})".format(self.semester, self.year)
 
+
 class Exam(models.Model):
     EXAM_CHOICES = (
         ('Midterm', 'Midterm'),
-        ('Mid_Makeup', 'Mid_Makeup'),
+        ('Midterm Makeup', 'Midterm_Makeup'),
         ('Final', 'Final'),
-        ('Final_Makeup', 'Final_Makeup'),
+        ('Final Makeup', 'Final_Makeup'),
     )
     YDL_CHOICES = (
         ('183', '183'),
         ('184', '184'),
         ('185', '185 Önlisans'),
-	('185L', '185 Lisans'),
+        ('185L', '185 Lisans'),
         ('186', '186 Önlisans'),
-	('186L', '186 Lisans'),
+        ('186L', '186 Lisans'),
     )
     BOOKLET_CHOICES = (
         ('A', 'A'),
@@ -61,11 +63,13 @@ class Exam(models.Model):
                             verbose_name=_("Oturum"))
     exam_title = "{0} {1} {2}".format(semester,exam,ydl)
     is_archived = models.BooleanField(default=False)
+
     def __str__(self):
         return "{0} {1} {2} {3}".format(self.semester,self.exam,self.ydl,self.session)
 
     def get_absolute_url(self):
         return reverse('quiz:exam_detail', args=[int(self.id)])
+
 
 class Question(models.Model):
     COL_CHOICES = (
@@ -86,6 +90,7 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return "/questions/%s" % self.id
+
 
 class AnswerKey(models.Model):
     get_exam = models.ForeignKey(Exam, related_name="examfk2", on_delete=models.CASCADE,default="")

@@ -1,33 +1,36 @@
-from io import BytesIO
-from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, UpdateView, TemplateView
-from django.forms import modelformset_factory, Textarea, formset_factory, TextInput
+from django.shortcuts import render, reverse, get_object_or_404, HttpResponseRedirect
+from django.views.generic import ListView, TemplateView
+from django.forms import modelformset_factory, Textarea, TextInput
+from django.http import JsonResponse
 
-from .models import Question, Exam, AnswerKey
-from .forms import AnswerKeyForm
+from .models import Question, Exam
+
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+
 
 class ExamListView(LoginRequiredMixin,ListView):
     model = Exam
     context_object_name = 'exams'
     template_name = 'mc/exam_list.html'
+
     def get_queryset(self):
         queryset = super(ExamListView, self).get_queryset().filter(is_archived=False)
         return queryset
 
-class ArchivedExamListView(LoginRequiredMixin,ListView):
+
+class ArchivedExamListView(LoginRequiredMixin, ListView):
     model = Exam
     context_object_name = 'exams'
     template_name = 'mc/exam_list.html'
+
     def get_queryset(self):
         queryset = super(ArchivedExamListView, self).get_queryset().filter(is_archived=True)
         return queryset
+
 
 def archive_exam(request, exam_id):
     is_archived = request.GET.get('is_archived', True)
@@ -40,6 +43,7 @@ def archive_exam(request, exam_id):
         return JsonResponse({"success": False})
     return JsonResponse(data)
 
+
 @login_required
 def exam_detail(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
@@ -50,12 +54,12 @@ def exam_detail(request, exam_id):
 def exam_detail_update(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
     QuestionFormSet = modelformset_factory(Question,
-                                        fields=('question', 'option1', 'option2', 'option3', 'option4','columns'), 
-                                        widgets={
-                                            'question': Textarea(attrs={'cols':50,'rows':3}),
-                                            'option1': TextInput(attrs={'placeholder':'Doğru cevabı buraya yazın'})}, 
-                                        extra=25, 
-                                        max_num=25)
+                                           fields=('question', 'option1', 'option2', 'option3', 'option4', 'columns'),
+                                           widgets={
+                                            'question': Textarea(attrs={'cols': 50, 'rows': 3}),
+                                            'option1': TextInput(attrs={'placeholder': 'Doğru cevabı buraya yazın'})},
+                                           extra=25,
+                                           max_num=25)
 
     if request.method == 'POST':
         formset = QuestionFormSet(request.POST, queryset=Question.objects.filter(exam_title__id=exam.id))
@@ -69,6 +73,6 @@ def exam_detail_update(request, exam_id):
         
     else:
         formset = QuestionFormSet(queryset=Question.objects.filter(exam_title__id=exam.id))
-        return render(request, 'mc/exam_detail_update.html', {'exam':exam,'formset':formset})
+        return render(request, 'mc/exam_detail_update.html', {'exam': exam, 'formset': formset})
 
  
