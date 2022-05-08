@@ -1,12 +1,10 @@
-
 from django.contrib.auth.decorators import login_required
 from reportlab.lib.units import mm, cm
 from reportlab.platypus import (SimpleDocTemplate, Frame, PageTemplate, NextPageTemplate)
-
 from django.db.models.base import ObjectDoesNotExist
-from questions.models import Question, Exam, AnswerKey
 
-# Dosyaları ayrıştırmak için eklenen bölüm:
+from questions.models import AnswerKey
+
 from pdf.page_outline import PageOutline
 from pdf.tools.conditional_spacer import ConditionalSpacer
 from pdf.tools import set_options_acc_to_key
@@ -16,14 +14,19 @@ from pdf.tools.set_first_page import first_page
 from pdf.tools.set_later_pages import later_pages
 from pdf.tools.set_texts import set_texts
 from pdf.tools.set_frames import set_frames
-# Dosya ayrıştırma bitiş
 
 
 @login_required
-def exportPDF(request, exam_id): #A Kitapçığı
+def exportPDFa(request, exam_id): #A Kitapçığı
 	booklet_type = "A"
-	exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions = prepare_both_groups(request, exam_id, seed_number=2)
-	###############################################################################
+
+	exam_year, \
+	exam_semester, \
+	exam_ydl, \
+	e_type_upper, \
+	exam_session, \
+	get_questions = prepare_both_groups(request, exam_id, seed_number=2)
+
 	# Cevap anahtarı girilmişse ona göre sırala,
 	# yoksa tüm doğru cevaplar A şıkkı olsun.
 	try:
@@ -74,10 +77,13 @@ def exportPDF(request, exam_id): #A Kitapçığı
 @login_required
 def exportPDFb(request,exam_id): # B Kitapçığı
 	booklet_type = "B"
-	exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions = prepare_both_groups(request,
-																										exam_id,
-																										seed_number=4)
-	###############################################################################
+	exam_year, \
+	exam_semester, \
+	exam_ydl, \
+	e_type_upper, \
+	exam_session, \
+	get_questions = prepare_both_groups(request, exam_id, seed_number=4)
+
 	try:
 		answers = AnswerKey.objects.get(get_exam_id=exam_id)
 		b_answer = answers.answer_b
