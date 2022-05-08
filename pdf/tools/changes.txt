@@ -1,8 +1,0 @@
-###################
-#views.py 122. ve 347. satırdaki qr çizimini yoruma çevirdim.
-#page_outline'a 30.yıl logosu bölümü eklendi.
-#page outline Kitapçık türü bölümünde sağdaki türün çerçevesi hafif sola kaydırıldı (satır 97-98)
-#page_outline 30-31.satır A harfi
-
-
-views.py 102. satırdaki qr_code generator page_outline'a alındı.

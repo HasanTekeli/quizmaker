@@ -1,8 +1,8 @@
 import copy
 
-# Soruları girilen cevap anahtarına göre sıralama.
-# option_temp fazladan bir seçenek koyma yeri,
-# oraya kes yapıştır yaparak yerlerini değiştiriyor.
+'''Soruları girilen cevap anahtarına göre sıralama.
+option_temp fazladan bir seçenek koyma yeri,
+oraya kes yapıştır yaparak yerlerini değiştiriyor.'''
 
 def set_options_on_a(get_questions, a_answer):
     for x in get_questions:
