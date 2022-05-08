@@ -1,60 +1,21 @@
-from cmath import log
-import copy
-import reportlab
-from django.shortcuts import render, get_object_or_404
-from io import BytesIO
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.template.loader import get_template
-from django.views import View
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_JUSTIFY
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
 from reportlab.lib.units import mm, cm
-from reportlab.platypus import (SimpleDocTemplate, 
-								Spacer, Image, Table, TableStyle,
-								BaseDocTemplate, 
-								Frame, Paragraph, 
-								PageTemplate, NextPageTemplate,
-								KeepTogether)
-from reportlab.platypus.flowables import BalancedColumns
-from reportlab.graphics import renderPDF #qrcode için eklendi
-from reportlab.graphics.barcode import qr #qrcode için eklendi
-from reportlab.graphics.shapes import Drawing #qrcode için eklendi
-import random # B kitapçığı soru karıştırma için
-from django.views.decorators.clickjacking import xframe_options_sameorigin
-from django.conf import settings
+from reportlab.platypus import (SimpleDocTemplate,
+								Frame,
+								PageTemplate, NextPageTemplate)
+import random # soru karıştırma için
 from django.db.models.base import ObjectDoesNotExist
-
 from questions.models import Question, Exam, AnswerKey
-
-#Dosyaları ayrıştırmak için eklenen bölüm:
-from pdf import strings
+# Dosyaları ayrıştırmak için eklenen bölüm:
 from pdf.page_outline import PageOutline
-from pdf import table_style
-
-from pdf.tools.qr_generator import qr_generator
 from pdf.tools.conditional_spacer import ConditionalSpacer
 from pdf.tools import options_on_key
 from pdf.tools.options_columns import set_option_column
-#Dosya ayrıştırma bitiş
-
-
-reportlab.rl_config.TTFSearchPath.append(str(settings.BASE_DIR) + '/static/fonts')
-static_folder = settings.BASE_DIR + '/static'
-
-pdfmetrics.registerFont(
-    TTFont('Times-New-Roman-Bold', 'TTimesb.ttf')
-)
-pdfmetrics.registerFont(
-   	TTFont('Times-New-Roman', 'times.ttf')
-)
+# Dosya ayrıştırma bitiş
 
 font_bold = 'Times-New-Roman-Bold'
 font = 'Times-New-Roman'
-
 
 @login_required
 def exportPDF(request,exam_id): #A Kitapçığı
@@ -164,20 +125,16 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	frame3 = Frame(20, 150, 270, 650, id='col3')
 	frame4 = Frame(310, 150, 260,650, id='col4')
 	
-	#Sütun ekleme
+	# Sütun ekleme
 
 	elements = []
 	doc.addPageTemplates([PageTemplate(id='Page1',frames=[frame1,frame2],onPage=myFirstPage),])
 	doc.addPageTemplates([PageTemplate(id='Page2',frames=[frame3,frame4],onPage=myLaterPages),])
 	elements.append(NextPageTemplate('Page2'))
-	#Soru atamaları	
-	
-
-
+	# Soru atamaları
 	options_on_key.set_options_on_a(get_questions, a_answer)
 
 	set_option_column(get_questions, styles, elements, opt_2_que_spacer)
-
 	doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 	
 	return response
@@ -230,15 +187,14 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 		title4 = '{0}'.format(exam_info)
 		canvas.saveState()
 		
-		#Burada class based olarak sayfanın tüm yapısı oluşturuluyor.
+		# Burada class based olarak sayfanın tüm yapısı oluşturuluyor.
 		page.outline1(canvas)
 		canvas.saveState()
 		
-		#Burada class based olarak A kitapçığı 1.sayfaya özgü bölümler oluşturuluyor.
+		# Burada class based olarak A kitapçığı 1.sayfaya özgü bölümler oluşturuluyor.
 		page.bookletB1(canvas)
 
-		
-		#Başlık sınav ismi 
+		# Başlık sınav ismi
 		canvas.drawCentredString(290, 755, title4)
 
 		# Oturum ve lisans önlisans bilgisi
@@ -262,21 +218,17 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 		canvas.restoreState()
 
 	def myLaterPages(canvas, doc):
-		#Burada class based olarak sayfa tablosu oluşturuluyor.
+		# Burada class based olarak sayfa tablosu oluşturuluyor.
 		page.outline2(canvas)
 		canvas.saveState()
-		
-		#Burada class based olarak A kitapçığı 1.sayfaya özgü bölümler oluşturuluyor.
+
 		page.bookletB2(canvas)
-		
 
 	# Style kısmı class-based oldu.
 	page.pageStyle(pdfName)
 	response, styles = page.pageStyle(pdfName)
 	
-	q_font_size = 10 #Soruların font büyüklüğü
-	o_font_size = 10 #Cevapların font büyüklüğü
-	##############################################
+
 	#Buraya adaptive spacer gibi birşey eklenecek
 	if exam_ydl == "183" or exam_ydl == "184":
 		opt_2_que_spacer = ConditionalSpacer(1*mm, 1*mm)
