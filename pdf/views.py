@@ -17,8 +17,8 @@ from pdf.tools.options_columns import set_option_column
 font_bold = 'Times-New-Roman-Bold'
 font = 'Times-New-Roman'
 
-@login_required
-def exportPDF(request,exam_id): #A Kitapçığı
+
+def prepare_both_groups(request, exam_id, seed_number):
 	get_exam = get_object_or_404(Exam, id=exam_id)
 	get_semester = str(get_exam.semester)
 	get_session = get_exam.session
@@ -30,26 +30,33 @@ def exportPDF(request,exam_id): #A Kitapçığı
 	exam_ydl = get_exam.ydl
 	#### Soruların belli bir düzende karıştırılması için eklenen / düzenlenen kısım
 	get_ques_in_order = Question.objects.all().filter(exam_title_id=get_exam)
-	#185 ve 186 da tüm soruları karıştır, 183-184'te son soru yerinde kalsın.
+	# 185 ve 186 da tüm soruları karıştır, 183-184'te son soru yerinde kalsın.
 	if exam_ydl == "183" or exam_ydl == "184":
 		list_of_ques = list(get_ques_in_order)
-		ques_except_last = [x for i,x in enumerate(list_of_ques) if i!=24]
-		try: # Hiç soru eklenmemişse hata vermemesi için try except blokunda
+		ques_except_last = [x for i, x in enumerate(list_of_ques) if i != 24]
+		try:  # Hiç soru eklenmemişse hata vermemesi için try except blokunda
 			last_que = list_of_ques.pop()
 		except IndexError:
 			pass
 		list_of_ques_except_last = list(ques_except_last)
-		random.seed(2)
+		random.seed(seed_number)
 		random.shuffle(list_of_ques_except_last)
-		try: # Hiç soru eklenmemişse hata vermemesi için try except blokunda
+		try:  # Hiç soru eklenmemişse hata vermemesi için try except blokunda
 			list_of_ques_except_last.append(last_que)
 		except UnboundLocalError:
 			pass
 		get_questions = list(list_of_ques_except_last)
 	else:
 		get_questions = list(get_ques_in_order)
-		random.seed(2)
+		random.seed(seed_number)
 		random.shuffle(get_questions)
+	return exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions
+
+
+@login_required
+def exportPDF(request, exam_id): #A Kitapçığı
+	booklet_type = "A"
+	exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions = prepare_both_groups(request, exam_id, seed_number=2)
 	###############################################################################
 	# Cevap anahtarı girilmişse ona göre sırala,
 	# yoksa tüm doğru cevaplar A şıkkı olsun.
@@ -60,8 +67,11 @@ def exportPDF(request,exam_id): #A Kitapçığı
 		answers = 'AAAAAAAAAAAAAAAAAAAAAAAAA'
 		a_answer = answers
 	
-	booklet_type = "A"
-	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year, exam_semester, exam_ydl[0:3], e_type_upper)
+
+	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year,
+													  exam_semester,
+													  exam_ydl[0:3],
+													  e_type_upper)
 	pdfName = '{0} {1} TERM YDL{2} {3} EXAM {4} {5}.pdf'.format(exam_year,
 																exam_semester,
 																exam_ydl,
@@ -152,37 +162,10 @@ def exportPDF(request,exam_id): #A Kitapçığı
 
 @login_required
 def exportPDFb(request,exam_id): # B Kitapçığı
-	get_exam = get_object_or_404(Exam, id=exam_id)
-	get_semester = str(get_exam.semester)
-	get_session = get_exam.session
-	exam_session = '{0}. Oturum'.format(get_session)
-	exam_year = get_semester[-10:-1]
-	exam_semester = get_semester[0:-12]
-	e_type = get_exam.exam
-	e_type_upper = e_type.upper()
-	exam_ydl = get_exam.ydl
-	#### Soruların belli bir düzende karıştırılması için eklenen / düzenlenen kısım
-	get_ques_in_order = Question.objects.all().filter(exam_title_id=get_exam)
-	#185 ve 186 da tüm soruları karıştır, 183-184'te son soru yerinde kalsın.
-	if exam_ydl == "183" or exam_ydl == "184":
-		list_of_ques = list(get_ques_in_order)
-		ques_except_last = [x for i,x in enumerate(list_of_ques) if i!=24]
-		try:
-			last_que = list_of_ques.pop()
-		except IndexError:
-			pass
-		list_of_ques_except_last = list(ques_except_last)
-		random.seed(4)
-		random.shuffle(list_of_ques_except_last)
-		try:
-			list_of_ques_except_last.append(last_que)
-		except UnboundLocalError:
-			pass
-		get_questions = list(list_of_ques_except_last)
-	else:
-		get_questions = list(get_ques_in_order)
-		random.seed(4)
-		random.shuffle(get_questions)
+	booklet_type = "B"
+	exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions = prepare_both_groups(request,
+																										exam_id,
+																										seed_number=4)
 	###############################################################################
 	try:
 		answers = AnswerKey.objects.get(get_exam_id=exam_id)
@@ -191,7 +174,7 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 		answers = 'AAAAAAAAAAAAAAAAAAAAAAAAA'
 		b_answer = answers
 	
-	booklet_type = "B"
+
 	exam_info = '{0} {1} TERM YDL{2} {3} EXAM'.format(exam_year,exam_semester,exam_ydl[0:3],e_type_upper)
 	pdfName = '{0} {1} TERM YDL{2} {3} EXAM {4} {5}.pdf'.format(exam_year,exam_semester,exam_ydl,e_type_upper,exam_session,booklet_type)
 	header_font_size = 12
