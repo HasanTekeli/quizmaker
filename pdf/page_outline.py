@@ -57,6 +57,10 @@ class PageOutline():
         self.exam_session = exam_session
         self.booklet_type = booklet_type
 
+    def background(c):
+        c.setFillColorRGB(1, 0, 0)
+        c.rect(5, 5, 652, 792, fill=1)
+
     def outline1(self, canvas):
         # Sayfa yapısı
         header_font_size = 12
@@ -145,14 +149,23 @@ class PageOutline():
         canvas.drawCentredString(pageWidth/2, 22, '1')
 
         #Orta yazılı çizgi
-        canvas.line(pageWidth/2, 40, pageWidth/2, 200)
+        canvas.line(pageWidth / 2, 40, pageWidth / 2, 585)
         canvas.saveState()
         canvas.setFont(font, 10)
+        #### Orta yazının arka plan rengini beyaz yapmak için dikdörtgen ###
+        # 1. Sayfa
+        canvas.setFillColorRGB(255, 255, 255)
+        canvas.rect(291, 200, 12, 200, stroke=0, fill=1)
+        # 291: sayfanın solundan uzaklık
+        # 200: sayfanın altından uzaklık
+        # 12: En
+        # 200: Boy
+        canvas.setFillColorRGB(0, 0, 0)
+        ########
         canvas.rotate(90)
 
         canvas.drawString(205, -301, strings.department)
         canvas.restoreState()
-        canvas.line(pageWidth/2, 400, pageWidth/2, 585)
         canvas.restoreState()
 
         # Soruların çerçevesi
@@ -172,14 +185,25 @@ class PageOutline():
         canvas.rect(15, 150, 565, 650, stroke=1, fill=0) #2.Sayfa soru çerçevesi
         canvas.restoreState()
         #Orta yazılı çizgi 2.Sayfa
-        canvas.line(pageWidth/2, 150, pageWidth/2, 320)
+        canvas.line(pageWidth / 2, 150, pageWidth / 2, 800)
         canvas.saveState()
         canvas.setFont(font, 10)
+        #### Orta yazının arka plan rengini beyaz yapmak için dikdörtgen ###
+        # 2. Sayfa
+        canvas.setFillColorRGB(255, 255, 255)
+        canvas.rect(291, 320, 12, 200, stroke=0, fill=1)
+        # 291: sayfanın solundan uzaklık
+        # 320: sayfanın altından uzaklık
+        # 12: En
+        # 200: Boy
+        canvas.setFillColorRGB(0, 0, 0)
+        ########
+
         canvas.rotate(90)
 
         canvas.drawString(325, -301, strings.department)
         canvas.restoreState()
-        canvas.line(pageWidth/2, 520, pageWidth/2, 800)
+
         canvas.saveState()
         canvas.restoreState()
 
