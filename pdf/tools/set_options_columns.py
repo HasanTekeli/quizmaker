@@ -2,6 +2,7 @@ from pdf import table_style
 from reportlab.lib.units import mm, cm
 from reportlab.platypus import Paragraph, Table, KeepTogether
 
+
 def set_option_column(get_questions, styles, elements, opt_2_que_spacer):
     q_font_size = 10  # Soruların font büyüklüğü
     o_font_size = 10  # Cevapların font büyüklüğü

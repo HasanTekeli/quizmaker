@@ -1,12 +1,12 @@
 import copy
 
-'''Soruları girilen cevap anahtarına göre sıralama.
+'''Soruları admin konsolunda Answer Key bölümüne girilen cevap anahtarına göre sıralar.
 option_temp fazladan bir seçenek koyma yeri,
 oraya kes yapıştır yaparak yerlerini değiştiriyor.'''
 
+
 def set_options_on_a(get_questions, a_answer):
     for x in get_questions:
-
         i = list(get_questions).index(x)
 
         if a_answer[i] == 'A' or a_answer[i] == 'a':
@@ -32,8 +32,8 @@ def set_options_on_a(get_questions, a_answer):
             x.option1 = copy.copy(x.option_temp)
             i += 1
 
-def set_options_on_b(get_questions, b_answer):
 
+def set_options_on_b(get_questions, b_answer):
     for x in get_questions:
         i = list(get_questions).index(x)
         if b_answer[i] == 'A' or b_answer[i] == 'a':

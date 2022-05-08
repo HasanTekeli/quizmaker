@@ -9,8 +9,8 @@ from questions.models import Question, Exam, AnswerKey
 # Dosyaları ayrıştırmak için eklenen bölüm:
 from pdf.page_outline import PageOutline
 from pdf.tools.conditional_spacer import ConditionalSpacer
-from pdf.tools import options_on_key
-from pdf.tools.options_columns import set_option_column
+from pdf.tools import set_options_acc_to_key
+from pdf.tools.set_options_columns import set_option_column
 from pdf.tools.prepare_groups import prepare_both_groups
 from pdf.tools.set_first_page import first_page
 from pdf.tools.set_later_pages import later_pages
@@ -63,7 +63,7 @@ def exportPDF(request, exam_id): #A Kitapçığı
 	set_frames(doc, myFirstPage, myLaterPages, elements, Frame, PageTemplate, NextPageTemplate)
 
 	# Soru atamaları
-	options_on_key.set_options_on_a(get_questions, a_answer)
+	set_options_acc_to_key.set_options_on_a(get_questions, a_answer)
 
 	set_option_column(get_questions, styles, elements, opt_2_que_spacer)
 	doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
@@ -113,7 +113,7 @@ def exportPDFb(request,exam_id): # B Kitapçığı
 	set_frames(doc, myFirstPage, myLaterPages, elements, Frame, PageTemplate, NextPageTemplate)
 
 	# Cevapları cevap anahtarına göre düzenleme
-	options_on_key.set_options_on_b(get_questions, b_answer)
+	set_options_acc_to_key.set_options_on_b(get_questions, b_answer)
 	set_option_column(get_questions, styles, elements, opt_2_que_spacer)
 
 	doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
