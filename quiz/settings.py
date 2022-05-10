@@ -82,12 +82,6 @@ WSGI_APPLICATION = 'quiz.wsgi.application'
 
 DATABASES = {
     'default': {
-    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #    'NAME': 'dj_quizmaker',
-    #    'USER': 'hasant',
-    #    'PASSWORD': 'P427262l',
-    #    'HOST': 'localhost',
-    #    'PORT': '5432',
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -130,13 +124,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, "static"),
-#    
-#]
+STATIC_FOLDER = os.path.join(BASE_DIR, "static")
+QUESTION_STATIC_FOLDER = os.path.join(STATIC_FOLDER, "questions")
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '/home/hasan/quizmaker/static/'
+STATICFILES_DIRS = [
+    STATIC_FOLDER,
+    QUESTION_STATIC_FOLDER
+#    
+]
+
+STATIC_URL = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = BASE_DIR
 #AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_REDIRECT_URL = 'home'

@@ -77,13 +77,19 @@ class Question(models.Model):
         ('2', '2 sütun'),
         ('4', '4 sütun')
     )
+    ROW_HEIGHT = (
+        ('1', '1 Satır'),
+        ('2', '2 Satır'),
+        ('3', '3 Satır'),
+    )
     exam_title = models.ForeignKey(Exam, related_name='examfk', on_delete=models.CASCADE, default="")
     question = models.TextField(max_length=4000, blank=True, verbose_name=_("Soru"), default="")
     option1 = models.CharField(max_length=200, blank=True, verbose_name=_("1.Seçenek"), default="")
     option2 = models.CharField(max_length=200, blank=True, verbose_name=_("2.Seçenek"), default="")
     option3 = models.CharField(max_length=200, blank=True, verbose_name=_("3.Seçenek"), default="")
     option4 = models.CharField(max_length=200, blank=True, verbose_name=_("4.Seçenek"), default="")
-    columns = models.CharField(max_length=1, choices=COL_CHOICES, default="1")
+    columns = models.CharField(max_length=1, choices=COL_CHOICES, default="2")
+    row_height = models.CharField(max_length=1, choices=ROW_HEIGHT, default="1")
     option_temp = models.CharField(max_length=200, blank=True, verbose_name=_("GeçiciSeçenek"), default="")
     def __str__(self):
         return self.question

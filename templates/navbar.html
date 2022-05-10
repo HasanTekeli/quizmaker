@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       {% url 'quiz:exam_detail' id=exam_id as exam_detail %}
       {% url 'quiz:exam_detail_update' as exam_detail_update %}
-      {% url request.path as path %}
+      {% url 'request.path' as path %}
       {% url 'quiz:exam_list' as exam_list %}
       <ul class="navbar-nav mr-auto">
         {% if user.is_authenticated %}
@@ -40,5 +40,5 @@
         </div>
         {% endif %}
       
-    </div>
+    
   </nav>

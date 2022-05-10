@@ -41,7 +41,6 @@ def archive_exam(request, exam_id):
         return HttpResponseRedirect(reverse('quiz:exam_list'))
     except Exception as e:
         return JsonResponse({"success": False})
-    return JsonResponse(data)
 
 
 @login_required
@@ -54,7 +53,9 @@ def exam_detail(request, exam_id):
 def exam_detail_update(request, exam_id):
     exam = get_object_or_404(Exam, id=exam_id)
     QuestionFormSet = modelformset_factory(Question,
-                                           fields=('question', 'option1', 'option2', 'option3', 'option4', 'columns'),
+                                           fields=('question', 'option1',
+                                                   'option2', 'option3',
+                                                   'option4', 'columns', 'row_height'),
                                            widgets={
                                             'question': Textarea(attrs={'cols': 50, 'rows': 3}),
                                             'option1': TextInput(attrs={'placeholder': 'Doğru cevabı buraya yazın'})},
