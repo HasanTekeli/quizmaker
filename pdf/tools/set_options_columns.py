@@ -11,8 +11,8 @@ def set_option_column_and_rowheight(get_questions, styles, elements, opt_2_que_s
     q_table_style = table_style.q_table_style
     o_table_style = table_style.o_table_style
     for idx, value in enumerate(get_questions):
-        get_row_height = get_questions[idx].row_height
 
+        get_row_height = get_questions[idx].row_height
         if get_row_height == '2':
             set_row_height = 23
         elif get_row_height == '3':
