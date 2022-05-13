@@ -94,38 +94,24 @@ class PageOutline():
         canvas.drawCentredString(290, 770, title3)
 
         # İlk sütun açıklama
-        text = canvas.beginText(30, 730) # Eklenecek metnin başlangıç ve bitiş koordinatlarını veriyor.
-        text.setFont(font_bold, 12)
-        text.setFillColor(colors.black)
-        for line in strings.firstColumnText: # textLines içindeki satırları tek tek okuması için
-            text.textLine(line)
-        canvas.drawText(text)
-
-        # İlk sütun öğrenci bilgileri
-        text = canvas.beginText(20, 680) # Eklenecek metnin başlangıç ve bitiş koordinatlarını veriyor.
-        text.setFont(font_bold, 11)
-        text.setFillColor(colors.black)
-        for line in strings.studentInfo: # textLines içindeki satırları tek tek okuması için
-            text.textLine(line)
-        canvas.drawText(text)
+        firstColumnText = strings.firstColumnTextP
+        firstColumnText.wrapOn(canvas, 230, 50)
+        firstColumnText.drawOn(canvas, 25, 705)
 
         # Öğrenci bilgileri çerçeve
         canvas.roundRect(15, 645, 240, 50, 0, stroke=1, fill=0)
+        # İlk sütun öğrenci bilgileri
+        student_info = strings.studentInfoP
+        student_info.wrapOn(canvas, 230, 100)
+        student_info.drawOn(canvas, 25, 650)
 
         # Üst bölüm sütunlar arası çizgi
         canvas.line(260, 750, 260, 640)
-        # Sağ sütun bilgiler
-        text = canvas.beginText(280, 730) # Eklenecek metnin başlangıç ve bitiş koordinatlarını veriyor.
-        text.setFont(font_bold, 10)
-        text.setFillColor(colors.black)
-        for line in strings.secondColumnText: # textLines içindeki satırları tek tek okuması için
-            text.textLine(line)
-        canvas.drawText(text)
 
-        # Sağ sütun altı çizili kelimelerin çizgileri
-        canvas.line(412, 727, 454, 727) # yumuşak
-        canvas.line(280, 715, 360, 715) # uçlu kurşun kalem
-        canvas.line(346, 655, 450, 655) # değerlendirilmeyecektir.
+        # Sağ sütun bilgiler
+        second_column_text = strings.secondColumnTextP
+        second_column_text.wrapOn(canvas, 195, 110)
+        second_column_text.drawOn(canvas, 270, 650)
 
         # Dikkat Kitapçık türü
         canvas.setFont(font_bold, 14)
@@ -194,12 +180,9 @@ class PageOutline():
         # 200: Boy
         canvas.setFillColorRGB(0, 0, 0)
         ########
-
         canvas.rotate(90)
-
         canvas.drawString(325, -301, strings.department)
         canvas.restoreState()
-
         canvas.saveState()
         canvas.restoreState()
 
@@ -214,16 +197,9 @@ class PageOutline():
         canvas.roundRect(560, 803, 20, 20, 2, stroke=1, fill=0)
 
         #2. Sayfa açıklama
-        info_2ndpage_bottom = strings.info_2ndpage_bottom
-        text = canvas.beginText(30, 80) # Eklenecek metnin başlangıç ve bitiş koordinatlarını veriyor.
-        text.setFont(font_bold, 10)
-        text.setFillColor(colors.black)
-        for line in info_2ndpage_bottom: #textLines içindeki satırları tek tek okuması için
-            text.textLine(line)
-        canvas.drawText(text)
-        canvas.line(346, 78, 380, 78)
-        canvas.line(30, 55, 185, 55) #Değerlendirilmeyecektir
-        canvas.line(30, 53, 185, 53) #Değerlendirilmeyecektir
+        info_2ndpage_bottom = strings.info_2ndpage_bottomP
+        info_2ndpage_bottom.wrapOn(canvas, 400, 40)
+        info_2ndpage_bottom.drawOn(canvas, 25, 40)
 
         #Dikkat Kitapçık türü
         canvas.setFont(font_bold, 14)
