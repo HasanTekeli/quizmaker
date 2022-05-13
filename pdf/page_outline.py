@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from reportlab.lib.units import mm, cm
+from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_JUSTIFY
@@ -56,10 +56,6 @@ class PageOutline():
         self.exam_info = exam_info
         self.exam_session = exam_session
         self.booklet_type = booklet_type
-
-    def background(c):
-        c.setFillColorRGB(1, 0, 0)
-        c.rect(5, 5, 652, 792, fill=1)
 
     def outline1(self, canvas):
         # Sayfa yapısı

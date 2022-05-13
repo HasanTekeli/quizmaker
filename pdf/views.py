@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from reportlab.lib.units import mm, cm
-from reportlab.platypus import (SimpleDocTemplate, Frame, PageTemplate, NextPageTemplate)
+from reportlab.platypus import (SimpleDocTemplate,
+                                Frame,
+                                PageTemplate,
+                                NextPageTemplate)
 from django.db.models.base import ObjectDoesNotExist
 
 from questions.models import AnswerKey
