@@ -28,8 +28,8 @@ paragraph_style_10 = ParagraphStyle("P10",
 									leading=13
 									)
 
-firstColumnTextP = Paragraph('''Soru kitapçıklarınızın üzerindeki isim /<br/>soy 
-								isim, okul numarası ve bölüm kısımlarını<br/>
+firstColumnTextP = Paragraph('''Soru kitapçıklarınızın üzerindeki isim / soy 
+								isim, okul numarası ve bölüm kısımlarını
 								doldurmayı unutmayınız.''', paragraph_style_12)
 
 studentInfoP = Paragraph('''Name / Surname: <br/>

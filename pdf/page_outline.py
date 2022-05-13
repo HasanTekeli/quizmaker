@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from reportlab.lib.units import mm
-from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_JUSTIFY
 from pdf import strings
+from pdf.tools.set_booklet_info_table import booklet_info_table
 from django.conf import settings
 
 static_folder = settings.BASE_DIR + '/static'
@@ -11,8 +11,6 @@ static_folder = settings.BASE_DIR + '/static'
 font_bold = 'Times-New-Roman-Bold'
 font = 'Times-New-Roman'
 
-dikkat = 'DİKKAT!!!'
-booklet = 'KİTAPÇIK TÜRÜ'
 pageWidth = 210*mm
 
 
@@ -26,11 +24,11 @@ def front_page(bookletType, canvas): # Ön Sayfa
     canvas.drawCentredString(25, 22, bookletType)
     canvas.drawCentredString(570, 22, bookletType)
     if bookletType == 'A':
-        canvas.roundRect(500, 660, 12, 12, 4, stroke=1, fill=1)
-        canvas.roundRect(540, 660, 12, 12, 4, stroke=1, fill=0)
+        canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=1)
+        canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=0)
     else:
-        canvas.roundRect(500, 660, 12, 12, 4, stroke=1, fill=0)
-        canvas.roundRect(540, 660, 12, 12, 4, stroke=1, fill=1)
+        canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=0)
+        canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=1)
 
 
 def back_page(bookletType, canvas): # Arka sayfa
@@ -43,12 +41,13 @@ def back_page(bookletType, canvas): # Arka sayfa
     canvas.drawCentredString(570, 807, bookletType)
 
     # Sayfa altı kitapçık türü dolgulu yuvarlaklar
+
     if bookletType == 'A':
-        canvas.roundRect(460, 40, 12, 12, 4, stroke=1, fill=1)
-        canvas.roundRect(500, 40, 12, 12, 4, stroke=1, fill=0)
+        canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=1)
+        canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=0)
     else:
-        canvas.roundRect(460, 40, 12, 12, 4, stroke=1, fill=0)
-        canvas.roundRect(500, 40, 12, 12, 4, stroke=1, fill=1)
+        canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=0)
+        canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=1)
 
 
 class PageOutline():
@@ -67,10 +66,7 @@ class PageOutline():
         title3 = strings.department
         canvas.saveState()
         # Başlık kısmının çerçevesi:
-        canvas.line(15,820,580,820) #Üst çizgi
-        canvas.line(15,820,15,750) #Sol yan çizgi
-        canvas.line(15,750,580,750) #Alt çizgi
-        canvas.line(580,820,580,750) #Sağ çizgi
+        canvas.rect(15, 750, 565, 70) #sol, alt, en, boy
 
         # Başlık kısmı logo
         canvas.drawInlineImage(str(static_folder)+ '/img/logo.png', 20, 755, 60, 60)
@@ -81,7 +77,7 @@ class PageOutline():
         # 30. yıl logosu
         canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
 
-        # Kitapçık türü çerçeveleri
+        # Üst Başlık Kitapçık türü çerçeveleri
         canvas.setFont(font_bold, 16)
         canvas.roundRect(95, 790, 20, 20, 2, stroke=1, fill=0)
         # canvas.roundRect(475, 790, 20, 20, 2, stroke=1, fill=0) #qr geldiğinde bu açılıp alttaki yoruma çevrilecek.
@@ -113,16 +109,11 @@ class PageOutline():
         second_column_text.wrapOn(canvas, 195, 110)
         second_column_text.drawOn(canvas, 270, 650)
 
+        ########################
         # Dikkat Kitapçık türü
-        canvas.setFont(font_bold, 14)
-        canvas.drawString(490, 710, dikkat) #Dikkat!!!
-        canvas.setFont(font_bold, 10)
-        canvas.drawString(485, 695, booklet) #Kitapçık Türü
-        canvas.roundRect(475, 650, 100, 55, 0, stroke=1, fill=0)
-        canvas.line(475, 690, 575, 690) #Kitapçık türü alt çizgi
-        canvas.setFont(font_bold, 14)
-        canvas.drawString(500, 675, 'A')
-        canvas.drawString(540, 675, 'B')
+        booklet_info_table(canvas, font_bold, "front")
+
+        ###############################
 
         #Sayfa Altı Kitapçık türü ve sayfa numarası
         canvas.setFont(font_bold, 16)
@@ -198,19 +189,11 @@ class PageOutline():
 
         #2. Sayfa açıklama
         info_2ndpage_bottom = strings.info_2ndpage_bottomP
-        info_2ndpage_bottom.wrapOn(canvas, 400, 40)
+        info_2ndpage_bottom.wrapOn(canvas, 430, 40)
         info_2ndpage_bottom.drawOn(canvas, 25, 40)
 
-        #Dikkat Kitapçık türü
-        canvas.setFont(font_bold, 14)
-        canvas.drawString(450, 90, dikkat) #Dikkat!!!
-        canvas.setFont(font_bold, 10)
-        canvas.drawString(445, 75, booklet) #Kitapçık Türü
-        canvas.roundRect(435, 30, 100, 55, 0, stroke=1, fill=0)
-        canvas.line(435, 70, 535, 70) #Kitapçık türü alt çizgi
-        canvas.setFont(font_bold, 14)
-        canvas.drawString(460, 55, 'A')
-        canvas.drawString(500, 55, 'B')
+        # Dikkat Kitapçık türü yazan tablo
+        booklet_info_table(canvas, font_bold, "back")
 
     def bookletA1(self, canvas):
         bookletType = "A"
