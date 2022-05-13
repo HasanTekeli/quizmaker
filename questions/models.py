@@ -66,7 +66,7 @@ class Exam(models.Model):
     session = models.CharField(max_length=1, choices=SESSION_CHOICES, null=True,
                             verbose_name=_("Oturum"))
     right_logo = models.CharField(max_length=4, choices=RIGHT_LOGO_SIDE, null=True,
-                                  verbose_name="Sağ taraftaki logo boşluğu QR kod veya Logo")
+                                  verbose_name="Sağ üstteki boşluk: QR kod veya Logo")
     exam_title = "{0} {1} {2}".format(semester,exam,ydl)
     is_archived = models.BooleanField(default=False)
 
