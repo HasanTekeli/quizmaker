@@ -14,6 +14,8 @@ def prepare_both_groups(request, exam_id, seed_number):
     e_type = get_exam.exam
     e_type_upper = e_type.upper()
     exam_ydl = get_exam.ydl
+    right_logo = get_exam.right_logo
+
     #### Soruların belli bir düzende karıştırılması için eklenen / düzenlenen kısım
     get_ques_in_order = Question.objects.all().filter(exam_title_id=get_exam)
     # 185 ve 186 da tüm soruları karıştır, 183-184'te son soru yerinde kalsın.
@@ -36,4 +38,4 @@ def prepare_both_groups(request, exam_id, seed_number):
         get_questions = list(get_ques_in_order)
         random.seed(seed_number)
         random.shuffle(get_questions)
-    return exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions
+    return exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, get_questions, right_logo

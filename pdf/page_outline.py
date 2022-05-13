@@ -4,6 +4,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_JUSTIFY
 from pdf import strings
 from pdf.tools.set_booklet_info_table import booklet_info_table
+from pdf.tools.qr_generator import qr_generator
 from django.conf import settings
 
 static_folder = settings.BASE_DIR + '/static'
@@ -14,47 +15,12 @@ font = 'Times-New-Roman'
 pageWidth = 210*mm
 
 
-def front_page(bookletType, canvas): # Ön Sayfa
-    # Kitapçık türü
-    canvas.drawCentredString(105, 795, bookletType)
-    # canvas.drawCentredString(485,795,bookletType) # 30.yıl logosu nedeniyle biraz sola alındı.
-    canvas.drawCentredString(465, 795, bookletType)
-
-    # Sayfa Altı Kitapçık türü
-    canvas.drawCentredString(25, 22, bookletType)
-    canvas.drawCentredString(570, 22, bookletType)
-    if bookletType == 'A':
-        canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=1)
-        canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=0)
-    else:
-        canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=0)
-        canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=1)
-
-
-def back_page(bookletType, canvas): # Arka sayfa
-    # Sayfa Altı Kitapçık türü
-    canvas.drawCentredString(25, 132, bookletType)
-    canvas.drawCentredString(570, 132, bookletType)
-    
-    # Sayfa üstü kitapçık türü
-    canvas.drawCentredString(25, 807, bookletType)
-    canvas.drawCentredString(570, 807, bookletType)
-
-    # Sayfa altı kitapçık türü dolgulu yuvarlaklar
-
-    if bookletType == 'A':
-        canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=1)
-        canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=0)
-    else:
-        canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=0)
-        canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=1)
-
-
 class PageOutline():
-    def __init__(self, exam_info, exam_session, booklet_type):
+    def __init__(self, exam_info, exam_session, booklet_type, right_logo):
         self.exam_info = exam_info
         self.exam_session = exam_session
         self.booklet_type = booklet_type
+        self.right_logo = right_logo
 
     def outline1(self, canvas):
         # Sayfa yapısı
@@ -71,17 +37,27 @@ class PageOutline():
         # Başlık kısmı logo
         canvas.drawInlineImage(str(static_folder)+ '/img/logo.png', 20, 755, 60, 60)
 
-        # #### QR code generator
-        # qr_generator(canvas, self.exam_info, self.exam_session, self.booklet_type)
+        # Kitapçık türü
+        canvas.drawCentredString(105, 795, self.booklet_type)
+        #
 
-        # 30. yıl logosu
-        canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
+        if self.right_logo == "QR":
+            #### QR code generator
+            qr_generator(canvas, self.exam_info, self.exam_session, self.booklet_type)
+            canvas.drawCentredString(485, 795, self.booklet_type)
+            canvas.roundRect(475, 790, 20, 20, 2, stroke=1, fill=0)
+        elif self.right_logo == "LOGO":
+            # 30. yıl logosu
+            canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
+            canvas.drawCentredString(465, 795, self.booklet_type)
+            canvas.roundRect(455, 790, 20, 20, 2, stroke=1, fill=0)
+        else:
+            canvas.drawCentredString(485, 795, self.booklet_type)
+            canvas.roundRect(475, 790, 20, 20, 2, stroke=1, fill=0)
 
         # Üst Başlık Kitapçık türü çerçeveleri
         canvas.setFont(font_bold, 16)
         canvas.roundRect(95, 790, 20, 20, 2, stroke=1, fill=0)
-        # canvas.roundRect(475, 790, 20, 20, 2, stroke=1, fill=0) #qr geldiğinde bu açılıp alttaki yoruma çevrilecek.
-        canvas.roundRect(455, 790, 20, 20, 2, stroke=1, fill=0)
 
         # Başlık yazısı
         canvas.setFont(font_bold, header_font_size)
@@ -195,21 +171,51 @@ class PageOutline():
         # Dikkat Kitapçık türü yazan tablo
         booklet_info_table(canvas, font_bold, "back")
 
+    def front_page(self, booklet_type, canvas):  # Ön Sayfa
+        # Sayfa Altı Kitapçık türü
+        canvas.drawCentredString(25, 22, booklet_type)
+        canvas.drawCentredString(570, 22, booklet_type)
+
+        if booklet_type == 'A':
+            canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=1)
+            canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=0)
+        else:
+            canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=0)
+            canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=1)
+
+    def back_page(self, booklet_type, canvas):  # Arka sayfa
+        # Sayfa Altı Kitapçık türü
+        canvas.drawCentredString(25, 132, booklet_type)
+        canvas.drawCentredString(570, 132, booklet_type)
+
+        # Sayfa üstü kitapçık türü
+        canvas.drawCentredString(25, 807, booklet_type)
+        canvas.drawCentredString(570, 807, booklet_type)
+
+        # Sayfa altı kitapçık türü dolgulu yuvarlaklar
+
+        if booklet_type == 'A':
+            canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=1)
+            canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=0)
+        else:
+            canvas.roundRect(504, 40, 12, 12, 4, stroke=1, fill=0)
+            canvas.roundRect(544, 40, 12, 12, 4, stroke=1, fill=1)
+
     def bookletA1(self, canvas):
         bookletType = "A"
-        front_page(bookletType, canvas)
+        self.front_page(bookletType, canvas)
         
     def bookletA2(self, canvas):
         bookletType = "A"
-        back_page(bookletType, canvas)
+        self.back_page(bookletType, canvas)
 
     def bookletB1(self, canvas):
         bookletType = "B"
-        front_page(bookletType, canvas)
+        self.front_page(bookletType, canvas)
 
     def bookletB2(self, canvas):
         bookletType = "B"
-        back_page(bookletType, canvas)
+        self.back_page(bookletType, canvas)
 
     def pageStyle(self, pdfName):
         response = HttpResponse(content_type='application/pdf')

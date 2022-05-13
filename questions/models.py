@@ -53,7 +53,11 @@ class Exam(models.Model):
     SESSION_CHOICES = (
         ('1', '1. Oturum'),
         ('2', '2. Oturum')
-    ) 
+    )
+    RIGHT_LOGO_SIDE = (
+        ('QR', "QR Kod"),
+        ('LOGO', "Logo")
+    )
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, null=True)
     exam = models.CharField(max_length=15, choices=EXAM_CHOICES, null=True,
                             verbose_name=_("Sınav Seçimi"), default="Midterm")
@@ -61,6 +65,8 @@ class Exam(models.Model):
                             verbose_name=_("YDL183,184,etc."))
     session = models.CharField(max_length=1, choices=SESSION_CHOICES, null=True,
                             verbose_name=_("Oturum"))
+    right_logo = models.CharField(max_length=4, choices=RIGHT_LOGO_SIDE, null=True,
+                                  verbose_name="Sağ taraftaki logo boşluğu QR kod veya Logo")
     exam_title = "{0} {1} {2}".format(semester,exam,ydl)
     is_archived = models.BooleanField(default=False)
 

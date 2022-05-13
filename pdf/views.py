@@ -28,7 +28,8 @@ def exportPDFa(request, exam_id):  # A Kitapçığı
     exam_ydl, \
     e_type_upper, \
     exam_session, \
-    get_questions = prepare_both_groups(request, exam_id, seed_number=2)
+    get_questions, \
+    right_logo = prepare_both_groups(request, exam_id, seed_number=2)
 
     # Cevap anahtarı girilmişse ona göre sırala,
     # yoksa tüm doğru cevaplar A şıkkı olsun.
@@ -41,7 +42,7 @@ def exportPDFa(request, exam_id):  # A Kitapçığı
 
     exam_info, pdfName = set_texts(exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, booklet_type)
 
-    page = PageOutline(exam_info, exam_session, booklet_type)
+    page = PageOutline(exam_info, exam_session, booklet_type, right_logo)
 
     def myFirstPage(canvas, doc):
         first_page(canvas, page, exam_info, exam_ydl, exam_session, booklet_type)
