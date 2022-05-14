@@ -131,12 +131,11 @@ QUESTION_STATIC_FOLDER = os.path.join(STATIC_FOLDER, "questions")
 STATICFILES_DIRS = [
     STATIC_FOLDER,
     QUESTION_STATIC_FOLDER
-#    
 ]
 
 STATIC_URL = os.path.join(BASE_DIR, 'static/')
 STATIC_ROOT = BASE_DIR
-#AUTH_USER_MODEL = 'users.CustomUser'
+
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
