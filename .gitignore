@@ -1,6 +1,6 @@
 .idea/
 venv/
-
+quiz/key.py
 .vscode/
 db.sqlite3
 .DS_Store
