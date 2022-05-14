@@ -35,20 +35,18 @@ class PageOutline():
         canvas.rect(15, 750, 565, 70) #sol, alt, en, boy
 
         # Başlık kısmı logo
-        canvas.drawInlineImage(str(static_folder)+ '/img/logo.png', 20, 755, 60, 60)
+        canvas.drawInlineImage(str(static_folder)+ '/img/left_logo.png', 20, 755, 60, 60)
 
         # Kitapçık türü
         canvas.drawCentredString(105, 795, self.booklet_type)
         #
 
         if self.right_logo == "QR":
-            #### QR code generator
             qr_generator(canvas, self.exam_info, self.exam_session, self.booklet_type)
             canvas.drawCentredString(485, 795, self.booklet_type)
             canvas.roundRect(475, 790, 20, 20, 2, stroke=1, fill=0)
         elif self.right_logo == "LOGO":
-            # 30. yıl logosu
-            canvas.drawInlineImage(str(static_folder)+ '/img/30.png', 485, 755, 90, 60)
+            canvas.drawInlineImage(str(static_folder)+ '/img/right_logo.png', 485, 755, 90, 60)
             canvas.drawCentredString(465, 795, self.booklet_type)
             canvas.roundRect(455, 790, 20, 20, 2, stroke=1, fill=0)
         else:

@@ -4,7 +4,7 @@ from reportlab.lib.enums import TA_JUSTIFY
 
 font_bold = 'Times-New-Roman-Bold'
 
-uni = 'ZONGULDAK BÜLENT ECEVİT UNIVERSITY'
+uni = 'OPEN SOURCE EXAM GENERATOR'
 school = 'SCHOOL OF FOREIGN LANGUAGES'
 department = 'DEPARTMENT OF FOREIGN LANGUAGES'
 
