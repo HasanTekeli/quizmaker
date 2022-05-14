@@ -10,13 +10,13 @@ from questions.models import AnswerKey
 
 from pdf.page_outline import PageOutline
 from pdf.tools.conditional_spacer import ConditionalSpacer
-from pdf.tools import set_options_acc_to_key
-from pdf.tools.set_options_columns import set_option_column_and_rowheight
+from pdf.tools.set_options import set_options_order
+from pdf.tools.set_options import set_option_column_and_rowheight
 from pdf.tools.prepare_groups import prepare_both_groups
 from pdf.tools.set_first_page import first_page
 from pdf.tools.set_later_pages import later_pages
 from pdf.tools.set_texts import set_texts
-from pdf.tools.set_frames import set_frames
+from pdf.tools.set_frames_and_tables import set_frames
 
 
 @login_required
@@ -69,7 +69,7 @@ def exportPDFa(request, exam_id):  # A Kitapçığı
     set_frames(doc, myFirstPage, myLaterPages, elements, Frame, PageTemplate, NextPageTemplate)
 
     # Soru atamaları
-    set_options_acc_to_key.set_options_on_a(get_questions, a_answer)
+    set_options_order(get_questions, a_answer)
 
     set_option_column_and_rowheight(get_questions, styles, elements, opt_2_que_spacer)
     doc.build(elements, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
@@ -85,7 +85,8 @@ def exportPDFb(request, exam_id):  # B Kitapçığı
     exam_ydl, \
     e_type_upper, \
     exam_session, \
-    get_questions = prepare_both_groups(request, exam_id, seed_number=4)
+    get_questions, \
+    right_logo = prepare_both_groups(request, exam_id, seed_number=4)
 
     try:
         answers = AnswerKey.objects.get(get_exam_id=exam_id)
@@ -96,7 +97,7 @@ def exportPDFb(request, exam_id):  # B Kitapçığı
 
     exam_info, pdfName = set_texts(exam_year, exam_semester, exam_ydl, e_type_upper, exam_session, booklet_type)
 
-    page = PageOutline(exam_info, exam_session, booklet_type)
+    page = PageOutline(exam_info, exam_session, booklet_type, right_logo)
 
     def myFirstPage(canvas, doc):
         first_page(canvas, page, exam_info, exam_ydl, exam_session, booklet_type)
@@ -128,7 +129,7 @@ def exportPDFb(request, exam_id):  # B Kitapçığı
                NextPageTemplate)
 
     # Cevapları cevap anahtarına göre düzenleme
-    set_options_acc_to_key.set_options_on_b(get_questions, b_answer)
+    set_options_order(get_questions, b_answer)
 
     set_option_column_and_rowheight(get_questions, styles, elements, opt_2_que_spacer)
 

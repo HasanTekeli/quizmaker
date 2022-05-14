@@ -174,6 +174,7 @@ class PageOutline():
         canvas.drawCentredString(25, 22, booklet_type)
         canvas.drawCentredString(570, 22, booklet_type)
 
+        #Dikkat tablosunda dolgulu kareler
         if booklet_type == 'A':
             canvas.roundRect(504, 660, 12, 12, 4, stroke=1, fill=1)
             canvas.roundRect(544, 660, 12, 12, 4, stroke=1, fill=0)

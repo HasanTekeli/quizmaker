@@ -1,4 +1,6 @@
-from pdf import table_style
+import copy
+#from pdf import table_style
+from pdf.tools.set_frames_and_tables import q_table_style, o_table_style
 from reportlab.lib.units import mm, cm
 from reportlab.platypus import Paragraph, Table, KeepTogether
 
@@ -8,8 +10,8 @@ def set_option_column_and_rowheight(get_questions, styles, elements, opt_2_que_s
     o_font_size = 10  # Cevapların font büyüklüğü
 
 
-    q_table_style = table_style.q_table_style
-    o_table_style = table_style.o_table_style
+    #q_table_style = q_table_style
+    #o_table_style = o_table_style
     for idx, value in enumerate(get_questions):
 
         get_row_height = get_questions[idx].row_height
@@ -88,3 +90,36 @@ def set_option_column_and_rowheight(get_questions, styles, elements, opt_2_que_s
 
         elements.append(KeepTogether(q))
         elements.append(opt_2_que_spacer)
+
+
+'''Soru cevaplarını admin konsolunda Answer Key bölümüne girilen cevap anahtarına göre sıralar.
+option_temp fazladan bir seçenek koyma yeri,
+oraya kes yapıştır yaparak yerlerini değiştiriyor.'''
+
+
+def set_options_order(get_questions, answerkey):
+    for x in get_questions:
+        i = list(get_questions).index(x)
+
+        if answerkey[i] == 'A' or answerkey[i] == 'a':
+            x.option_temp = copy.copy(x.option1)
+            x.option1 = copy.copy(x.option_temp)
+            i += 1
+
+        elif answerkey[i] == 'B' or answerkey[i] == 'b':
+            x.option_temp = copy.copy(x.option2)
+            x.option2 = copy.copy(x.option1)
+            x.option1 = copy.copy(x.option_temp)
+            i += 1
+
+        elif answerkey[i] == 'C' or answerkey[i] == 'c':
+            x.option_temp = copy.copy(x.option3)
+            x.option3 = copy.copy(x.option1)
+            x.option1 = copy.copy(x.option_temp)
+            i += 1
+
+        elif answerkey[i] == 'D' or answerkey[i] == 'd':
+            x.option_temp = copy.copy(x.option4)
+            x.option4 = copy.copy(x.option1)
+            x.option1 = copy.copy(x.option_temp)
+            i += 1
